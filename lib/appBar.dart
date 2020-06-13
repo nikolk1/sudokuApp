@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'sharedStateWidget.dart';
+import 'sodukuBoardPage.dart';
 
 class SodukuBar extends StatelessWidget {
   @override
@@ -9,7 +11,11 @@ class SodukuBar extends StatelessWidget {
         title: Text('Soduku!'),
         backgroundColor: Color.fromRGBO(86, 169, 243, 25),
         ),
-        body: Text('another test'),
+        body: Container(
+          child: SharedStateWidget(
+            child: SodukuBoardPage()
+            ),
+        ),
       );
   }
 }
