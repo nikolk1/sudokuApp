@@ -1,0 +1,4 @@
+#Fri Jul 24 14:50:32 IDT 2020
+base.0=C\:\\Users\\user\\Desktop\\sodukuApp\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex
