@@ -45,7 +45,6 @@ class Action extends StatelessWidget
       {
         switch (actions[this.index]) {
           case 'Undo':
-            print('here');
             bool flag = SharedStateWidget.of(context).sudokuGenerator.undo();
             if(!flag)
             {
