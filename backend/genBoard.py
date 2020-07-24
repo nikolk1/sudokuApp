@@ -1,7 +1,19 @@
+from enum import Enum
+from typing import List
+from random import randint
+
+class Difficulty(Enum):
+    EASY = 1
+    MEDIUM = 2
+    HARD = 3
+    EXPERT = 4
 
 class Board:
-    def __init__(self):
-        self._board = [[ 0 for i in range(9) ] for j in range(9)] 
+    def __init__(self, *args):
+        if isinstance(args, List):
+            self._board = args
+        else:
+            self._board = [[ 0 for i in range(9) ] for j in range(9)] 
 
     def validateBoard(self, row: int, col: int, number: int):
         return self._checkRow(row, number) and self._checkCol(col, number) and self._checkCell(row, col, number)
@@ -44,11 +56,12 @@ class GenerateBoardMethods:
     @staticmethod
     def backtracking_method():
         board = Board()
-        GenerateBoardMethods._backtracking(board, 0, 0)
+        if not GenerateBoardMethods._backtracking(board, 0, 0):
+            return False  # raise Exception("not a valid board")
         return board
 
     @staticmethod
-    def _backtracking(b: Board, row: int, col: int):
+    def _backtracking(b: Board, row: int, col: int, check=False):
         if row >= 9:  # full board
             return True
         elif b._board[row][col] != 0:  # not empty square
@@ -67,6 +80,68 @@ class GenerateBoardMethods:
             return False
 
 
+class GeneratePuzzle:
+    def __init__(self, board: Board, difficulty):
+        self.board = board
+        self.difficulty = difficulty
+        self.curr_value = 0
+        self.curr_sqaure = (0, 0)
+
+    def num_clues(self):
+        levels = {Difficulty.EASY: 10, Difficulty.MEDIUM: 30, Difficulty.HARD: 60, Difficulty.EXPERT: 72}
+        return levels[self.difficulty]
+
+    def generate(self):
+        clues = self.num_clues()
+        while clues > 0:
+            # remove random sqaure from board
+            self._remove()
+
+            # check if solvable
+            if not self._isSolvable():
+                self.board._board[self.curr_sqaure[0]][self.curr_sqaure[1]] = self.curr_value
+            else:
+                # decrease counter
+                clues -= 1
+
+    def _remove(self):
+        found = False
+        while not found:
+            row = randint(0, 8)
+            col = randint(0, 8)
+            found = self.board._board[row][col] != 0
+        self.curr_sqaure = (row, col)
+        self.curr_value = self.board._board[row][col]
+        self.board._board[row][col] = 0
+
+
+    def _isSolvable(self):
+        copy = Board(self.board._board)
+        return self._backtracking(copy, 0, 0)
+
+    @staticmethod
+    def _backtracking(b: Board, row: int, col: int, check=False):
+        if row >= 9:  # full board
+            return True
+        elif b._board[row][col] != 0:  # not empty square
+            if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
+                b._board[row][col] = 0
+            else:
+                return True
+        else:
+            options = 0
+            for i in range(1, 10):
+                if b.validateBoard(row, col, i):
+                    b._board[row][col] = i
+                    if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
+                        b._board[row][col] = 0
+                    else:
+                        options += 1
+            return options == 1
+
+
 b = GenerateBoardMethods.backtracking_method()
-print(b)
+p = GeneratePuzzle(b, Difficulty.HARD)
+p.generate()
+print("a")
 
