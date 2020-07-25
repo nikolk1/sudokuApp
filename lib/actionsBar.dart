@@ -46,10 +46,13 @@ class Action extends StatelessWidget
         switch (actions[this.index]) {
           case 'Undo':
             bool flag = SharedStateWidget.of(context).sudokuGenerator.undo();
+
             if(!flag)
             {
               SnackBar(content: Text('Cannot Undo'));
             }
+            break;
+          case 'Erase':
             break;
         }
       },

@@ -1,5 +1,6 @@
 import 'dart:ffi';
 import 'package:flutter/material.dart';
+import 'package:soduku_app/sharedStateWidget.dart';
 
 class SudokuGeneratorService
 {
@@ -8,11 +9,16 @@ class SudokuGeneratorService
   int last_value = -1;
   int number = 0;
 
-  // final generator = SudokuGenerator();
-
   String getBoardCell(int row, int col)
   {
-    return this.board[row][col].toString();
+    if (this.board[row][col] == 0)
+    {
+      return '';
+    }
+    else
+    {
+      return this.board[row][col].toString();
+    }
   }
 
   void setBoardCell(int row, int col)
@@ -39,7 +45,8 @@ class SudokuGeneratorService
     {
       return false;
     }
-    this.board[this.last_cell['row']][this.last_cell['col']] = this.last_value;
+    this.setNumber(this.last_value);
+    this.setBoardCell(this.last_cell['row'], this.last_cell['col']);
     this.init_undo();
     return true;
   }
