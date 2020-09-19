@@ -1,12 +1,12 @@
 from app import app
-from flask import render_template
+from flask import jsonify
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return "hello 1!!!!!"
+    return "Welcome to my Sudoku Generator !!"
 
-@app.route('/generate/', methods=["GET"])
-def generate():
-    pass
+@app.route('/generate/<level>')
+def generate(level):
+    return jsonify(level=level)
