@@ -17,3 +17,6 @@ bash.exe.stackdump
 .dart_tool/flutter_build/6434b3452ac97609d664b348327e56d4/flutter_assets.d
 .dart_tool/flutter_build/fd4a68447c830c99f1295ed7c428abbd/.filecache
 android/.gradle/5.6.2/executionHistory/executionHistory.bin
+
+#flask
+backend/server/venv/
