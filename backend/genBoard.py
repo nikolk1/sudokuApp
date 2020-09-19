@@ -15,6 +15,13 @@ class Board:
         else:
             self._board = [[ 0 for i in range(9) ] for j in range(9)] 
 
+    def __str__(self):
+        printed_board = ""
+        for row in self._board:
+            for i, element in enumerate(row):
+                printed_board += str(element) + "," if i < len(row) - 1 else str(element) + "\n"
+        return printed_board
+
     def validateBoard(self, row: int, col: int, number: int):
         return self._checkRow(row, number) and self._checkCol(col, number) and self._checkCell(row, col, number)
 
