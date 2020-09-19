@@ -1,12 +1,13 @@
 from enum import Enum
 from typing import List
 from random import randint
+# from backend.solvers.SudokuSolversMethod import backtracking
 
 class Difficulty(Enum):
-    EASY = 1
-    MEDIUM = 2
-    HARD = 3
-    EXPERT = 4
+    EASY = 10
+    MEDIUM = 20
+    HARD = 30
+    EXPERT = 40
 
 class Board:
     def __init__(self, *args):
@@ -70,14 +71,20 @@ class GenerateBoardMethods:
             else:
                 return True
         else:
+            options = []
             for i in range(1, 10):
                 if b.validateBoard(row, col, i):
-                    b._board[row][col] = i
-                    if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
-                        b._board[row][col] = 0
-                    else:
-                        return True
-            return False
+                    options.append(i)
+            if not options:
+                return False
+            tries = 0
+            while b._board[row][col] == 0 and tries < 2 * len(options):
+                choice = randint(1, len(options))
+                b._board[row][col] = options[choice - 1]
+                if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
+                    b._board[row][col] = 0
+                tries += 1
+            return b._board[row][col] != 0
 
 
 class GeneratePuzzle:
@@ -117,14 +124,18 @@ class GeneratePuzzle:
 
     def _isSolvable(self):
         copy = Board(self.board._board)
-        return self._backtracking(copy, 0, 0)
+        return GeneratePuzzle.backtracking(copy)
 
     @staticmethod
-    def _backtracking(b: Board, row: int, col: int, check=False):
+    def backtracking(b):
+        return GeneratePuzzle._backtracking(b=b, row=0, col=0)
+
+    @staticmethod
+    def _backtracking(b: Board, row: int, col: int):
         if row >= 9:  # full board
             return True
         elif b._board[row][col] != 0:  # not empty square
-            if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
+            if not GeneratePuzzle._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
                 b._board[row][col] = 0
             else:
                 return True
@@ -133,7 +144,7 @@ class GeneratePuzzle:
             for i in range(1, 10):
                 if b.validateBoard(row, col, i):
                     b._board[row][col] = i
-                    if not GenerateBoardMethods._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
+                    if not GeneratePuzzle._backtracking(b, row + 1 if col == 8 else row, (col + 1) % 9):
                         b._board[row][col] = 0
                     else:
                         options += 1
@@ -141,7 +152,7 @@ class GeneratePuzzle:
 
 
 b = GenerateBoardMethods.backtracking_method()
-p = GeneratePuzzle(b, Difficulty.HARD)
+p = GeneratePuzzle(b, Difficulty.MEDIUM)
 p.generate()
 print("a")
 
