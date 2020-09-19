@@ -1,4 +1,4 @@
-from backend.genBoard import Board
+from genBoard import Board
 
 class SudokuSolversMethod:
     @staticmethod

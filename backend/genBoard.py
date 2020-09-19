@@ -1,7 +1,6 @@
 from enum import Enum
 from typing import List
 from random import randint
-# from backend.solvers.SudokuSolversMethod import backtracking
 
 class Difficulty(Enum):
     EASY = 10
@@ -149,10 +148,3 @@ class GeneratePuzzle:
                     else:
                         options += 1
             return options == 1
-
-
-b = GenerateBoardMethods.backtracking_method()
-p = GeneratePuzzle(b, Difficulty.MEDIUM)
-p.generate()
-print("a")
-
